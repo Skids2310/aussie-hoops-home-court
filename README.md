@@ -1,4 +1,4 @@
-# Aussie Hoops Home Court
+# Hoops Home Court
 
 An installable at-home basketball practice app for kids and parents.
 

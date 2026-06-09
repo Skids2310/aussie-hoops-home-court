@@ -1,7 +1,7 @@
 {
-  "name": "Aussie Hoops Home Court",
+  "name": "Hoops Home Court",
   "short_name": "Home Court",
-  "description": "At-home Aussie Hoops practice sessions, games, scores, progress streaks, and official links.",
+  "description": "At-home hoops practice sessions, games, scores, progress streaks, and official links.",
   "id": "https://skids2310.github.io/hoops-home-court/",
   "start_url": "https://skids2310.github.io/hoops-home-court/",
   "scope": "https://skids2310.github.io/hoops-home-court/",
