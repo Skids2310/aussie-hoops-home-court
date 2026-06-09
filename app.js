@@ -696,18 +696,11 @@ function setSession(minutes = getActiveSessionValue(), focus = getActiveFocusVal
               </label>
               <button class="button score-button" type="submit">Save record</button>
             </form>
-            <div class="top-scores">
-              <strong>Top 3</strong>
-              <ol data-score-list="${step.gameId}"></ol>
-            </div>
           `
           : ""
       }
     `;
     sessionOutput.append(card);
-    if (step.gameId) {
-      renderScoreList(step.gameId);
-    }
   });
 }
 
