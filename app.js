@@ -374,6 +374,7 @@ const dailySkillName = document.querySelector("#daily-skill-name");
 const dailySkillBody = document.querySelector("#daily-skill-body");
 const dailySkillCue = document.querySelector("#daily-skill-cue");
 const dailySkillTag = document.querySelector("#daily-skill-tag");
+const dailySkillDiagram = document.querySelector("#daily-skill-diagram");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const gameFilterButtons = document.querySelectorAll("[data-game-filter]");
 const sessionButtons = document.querySelectorAll("[data-session]");
@@ -422,8 +423,85 @@ function getDayOfYear() {
   return Math.floor(diff / 86400000);
 }
 
+function getSkillDiagram(skill) {
+  const common = `
+    <rect x="8" y="8" width="224" height="124" rx="12" />
+    <path class="court-line" d="M120 8v124" />
+    <circle class="marker start" cx="42" cy="70" r="8" />
+  `;
+
+  const diagrams = {
+    ball: `
+      ${common}
+      <circle class="marker" cx="104" cy="38" r="7" />
+      <circle class="marker" cx="146" cy="70" r="7" />
+      <circle class="marker" cx="188" cy="102" r="7" />
+      <path class="move-line" d="M42 70 C70 34 91 32 104 38 S130 73 146 70 S168 99 188 102" />
+      <path class="arrow" d="M178 92l10 10-14 3" />
+    `,
+    footwork: `
+      ${common}
+      <circle class="marker" cx="80" cy="38" r="7" />
+      <circle class="marker" cx="80" cy="102" r="7" />
+      <circle class="marker" cx="178" cy="38" r="7" />
+      <circle class="marker" cx="178" cy="102" r="7" />
+      <path class="move-line" d="M42 70 L80 38 L178 38 L178 102 L80 102 L42 70" />
+      <path class="arrow" d="M50 82l-8-12 14-1" />
+    `,
+    team: `
+      ${common}
+      <circle class="player" cx="72" cy="70" r="12" />
+      <circle class="player" cx="174" cy="70" r="12" />
+      <path class="pass-line" d="M84 70 H162" />
+      <path class="arrow" d="M151 60l13 10-13 10" />
+      <path class="move-line" d="M72 70 C86 48 98 38 116 34" />
+    `,
+    shooting: `
+      ${common}
+      <circle class="player" cx="76" cy="96" r="12" />
+      <circle class="hoop" cx="184" cy="42" r="15" />
+      <path class="pass-line" d="M84 90 C118 40 150 28 184 42" />
+      <path class="arrow" d="M172 35l14 6-11 10" />
+      <path class="court-line" d="M154 42h60" />
+    `,
+    defense: `
+      ${common}
+      <circle class="player" cx="78" cy="70" r="12" />
+      <circle class="marker" cx="166" cy="70" r="10" />
+      <path class="move-line" d="M78 70 H166" />
+      <path class="move-line" d="M94 46 H150" />
+      <path class="arrow" d="M140 36l12 10-12 10" />
+      <path class="arrow" d="M102 84l-12-14 16-2" />
+    `,
+    rebounding: `
+      ${common}
+      <circle class="hoop" cx="180" cy="36" r="14" />
+      <circle class="player" cx="92" cy="92" r="12" />
+      <circle class="marker" cx="132" cy="70" r="9" />
+      <path class="pass-line" d="M180 50 C166 78 146 91 104 94" />
+      <path class="move-line" d="M92 92 C108 72 120 68 132 70" />
+      <path class="arrow" d="M122 60l12 10-14 6" />
+    `,
+    game: `
+      ${common}
+      <circle class="marker" cx="82" cy="40" r="7" />
+      <circle class="marker" cx="158" cy="40" r="7" />
+      <circle class="marker" cx="158" cy="100" r="7" />
+      <circle class="marker" cx="82" cy="100" r="7" />
+      <path class="move-line" d="M42 70 L82 40 L158 40 L158 100 L82 100 L42 70" />
+      <path class="pass-line" d="M82 100 L158 40" />
+    `,
+  };
+
+  return `
+    <svg viewBox="0 0 240 140" role="img" aria-label="${skill.title} practice diagram">
+      ${diagrams[skill.tag] || diagrams.game}
+    </svg>
+  `;
+}
+
 function renderDailySkill() {
-  if (!dailySkillName || !dailySkillBody || !dailySkillCue || !dailySkillTag) {
+  if (!dailySkillName || !dailySkillBody || !dailySkillCue || !dailySkillTag || !dailySkillDiagram) {
     return;
   }
 
@@ -431,6 +509,7 @@ function renderDailySkill() {
   const skill = skills[todayIndex];
   dailySkillTag.textContent = `${skill.time} | ${focusLabels[skill.tag] || skill.tag}`;
   dailySkillName.textContent = skill.title;
+  dailySkillDiagram.innerHTML = getSkillDiagram(skill);
   dailySkillBody.textContent = skill.body;
   dailySkillCue.textContent = skill.cue;
 }
@@ -480,6 +559,7 @@ function renderSkills(filter = "all") {
       card.innerHTML = `
         <span>${skill.time} | ${skill.tag}</span>
         <h3>${skill.title}</h3>
+        <div class="skill-diagram" aria-hidden="true">${getSkillDiagram(skill)}</div>
         <p>${skill.body}</p>
         <div class="cue">${skill.cue}</div>
       `;
