@@ -5,7 +5,7 @@ An installable at-home basketball practice app for kids and parents.
 Live app:
 
 ```text
-https://skids2310.github.io/aussie-hoops-home-court/
+https://skids2310.github.io/hoops-home-court/
 ```
 
 ## Run locally
