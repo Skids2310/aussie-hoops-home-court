@@ -28,7 +28,8 @@ http://localhost:4173
 1. Create a new GitHub repository.
 2. Upload this project folder.
 3. In repository settings, enable Pages.
-4. Set the source to the main branch and root folder.
+4. Set the source to deploy from a branch.
+5. Choose the `master` branch and the root folder.
 
 ## App Features
 
