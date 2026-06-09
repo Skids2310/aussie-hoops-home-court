@@ -1,4 +1,4 @@
-const CACHE_NAME = "hoops-home-court-v2";
+const CACHE_NAME = "hoops-home-court-v3";
 const APP_ASSETS = [
   "./",
   "./index.html",

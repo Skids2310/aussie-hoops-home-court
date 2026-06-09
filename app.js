@@ -521,20 +521,26 @@ function renderDailySkill() {
 }
 
 function renderScoreList(gameId) {
-  const list = document.querySelector(`[data-score-list="${gameId}"]`);
-  if (!list) {
+  const lists = document.querySelectorAll(`[data-score-list="${gameId}"]`);
+  if (lists.length === 0) {
     return;
   }
 
   const scores = getTopGameScores(gameId);
   if (scores.length === 0) {
-    list.innerHTML = "<li>No scores yet</li>";
+    lists.forEach((list) => {
+      list.innerHTML = "<li>No scores yet</li>";
+    });
     return;
   }
 
-  list.innerHTML = scores
+  const scoreMarkup = scores
     .map((score, index) => `<li><span>#${index + 1}</span><strong>${score.value}</strong><small>${formatScoreDate(score.date)}</small></li>`)
     .join("");
+
+  lists.forEach((list) => {
+    list.innerHTML = scoreMarkup;
+  });
 }
 
 function saveGameScore(gameId, value) {
@@ -649,6 +655,8 @@ function getSessionPlan(minutes, focus) {
       label: "Game",
       title: focusGame.title,
       body: `${focusGame.body} Focus: ${focusLabels[focus]}.`,
+      score: focusGame.score,
+      gameId: slugify(focusGame.title),
     });
   }
 
@@ -678,8 +686,28 @@ function setSession(minutes = getActiveSessionValue(), focus = getActiveFocusVal
       <span class="step-label">${step.label}</span>
       <strong>${step.title}</strong>
       <small>${step.body}</small>
+      ${
+        step.gameId
+          ? `
+            <form class="score-form session-score-form" data-score-form="${step.gameId}">
+              <label>
+                <span>${step.score}</span>
+                <input type="number" min="0" step="1" inputmode="numeric" placeholder="Score" required />
+              </label>
+              <button class="button score-button" type="submit">Save record</button>
+            </form>
+            <div class="top-scores">
+              <strong>Top 3</strong>
+              <ol data-score-list="${step.gameId}"></ol>
+            </div>
+          `
+          : ""
+      }
     `;
     sessionOutput.append(card);
+    if (step.gameId) {
+      renderScoreList(step.gameId);
+    }
   });
 }
 
@@ -886,19 +914,17 @@ gameFilterButtons.forEach((button) => {
   });
 });
 
-if (gameGrid) {
-  gameGrid.addEventListener("submit", (event) => {
-    const form = event.target.closest("[data-score-form]");
-    if (!form) {
-      return;
-    }
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest("[data-score-form]");
+  if (!form) {
+    return;
+  }
 
-    event.preventDefault();
-    const input = form.querySelector("input");
-    saveGameScore(form.dataset.scoreForm, input.value);
-    input.value = "";
-  });
-}
+  event.preventDefault();
+  const input = form.querySelector("input");
+  saveGameScore(form.dataset.scoreForm, input.value);
+  input.value = "";
+});
 
 sessionButtons.forEach((button) => {
   button.addEventListener("click", () => {
