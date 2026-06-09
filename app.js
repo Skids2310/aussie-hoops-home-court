@@ -393,6 +393,7 @@ const prevMonthButton = document.querySelector("#prev-month");
 const nextMonthButton = document.querySelector("#next-month");
 const streakGoals = [1, 3, 7, 14, 30, 50, 75, 100, 150, 200];
 const calendarDate = new Date();
+let progressWasComplete = false;
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -548,6 +549,27 @@ function saveGameScore(gameId, value) {
   scores[gameId] = gameScores.sort((a, b) => b.value - a.value).slice(0, 3);
   saveGameScores(scores);
   renderScoreList(gameId);
+  showCelebration("Record saved. Chase the next best!");
+}
+
+function showCelebration(message) {
+  let toast = document.querySelector(".fun-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "fun-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    document.body.append(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.remove("show");
+  window.requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+  window.setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2400);
 }
 
 function renderSkills(filter = "all") {
@@ -841,6 +863,11 @@ function updateProgress() {
   saveCompletedDays([...completedDays]);
   renderStreaks();
   renderCalendar();
+
+  if (complete && !progressWasComplete) {
+    showCelebration("Daily goal complete. Streak power!");
+  }
+  progressWasComplete = complete;
 }
 
 filterButtons.forEach((button) => {
@@ -922,6 +949,7 @@ const todayProgress = savedHistory[getTodayKey()] || savedProgress;
 progressInputs.forEach((input) => {
   input.checked = Boolean(todayProgress[input.dataset.progress]);
 });
+progressWasComplete = progressInputs.length > 0 && [...progressInputs].every((input) => input.checked);
 
 renderSkills();
 renderGames();

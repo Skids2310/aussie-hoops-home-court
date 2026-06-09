@@ -7,8 +7,12 @@
   --orange-dark: #b84311;
   --blue: #176bb3;
   --green: #1f8f68;
+  --sun: #ffd449;
+  --pink: #e84a8a;
+  --teal: #20b6aa;
   --line: rgba(22, 32, 51, 0.13);
   --shadow: 0 18px 45px rgba(22, 32, 51, 0.12);
+  --fun-shadow: 0 14px 0 rgba(22, 32, 51, 0.08), 0 22px 48px rgba(22, 32, 51, 0.13);
 }
 
 * {
@@ -22,7 +26,10 @@ html {
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--paper);
+  background:
+    radial-gradient(circle at top left, rgba(255, 212, 73, 0.2), transparent 28%),
+    linear-gradient(135deg, rgba(32, 182, 170, 0.08), transparent 38%),
+    var(--paper);
   font-family: "Atkinson Hyperlegible", Arial, sans-serif;
   line-height: 1.5;
 }
@@ -931,6 +938,155 @@ footer p {
   margin: 0;
   max-width: 760px;
   color: rgba(255, 255, 255, 0.76);
+}
+
+.brand-mark {
+  transition: transform 180ms ease;
+}
+
+.brand:hover .brand-mark,
+.brand:focus-visible .brand-mark {
+  transform: rotate(-10deg) scale(1.06);
+}
+
+.nav-links a.active,
+.chip.active,
+.pill.active {
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+}
+
+.hero-shade {
+  background:
+    linear-gradient(90deg, rgba(9, 17, 32, 0.86), rgba(9, 17, 32, 0.42) 48%, rgba(9, 17, 32, 0.08)),
+    linear-gradient(0deg, rgba(9, 17, 32, 0.62), transparent 48%),
+    linear-gradient(135deg, rgba(242, 106, 33, 0.38), transparent 36%);
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.hero-badges span {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.44);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  font-size: 0.86rem;
+  font-weight: 700;
+  backdrop-filter: blur(10px);
+}
+
+.button,
+.chip,
+.pill,
+.link-grid a,
+.skill-card,
+.game-board article,
+.featured-skill,
+.tracker,
+.badge-card {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.button:hover,
+.chip:hover,
+.pill:hover,
+.link-grid a:hover,
+.skill-card:hover,
+.game-board article:hover,
+.featured-skill:hover,
+.badge-card:hover {
+  transform: translateY(-3px);
+}
+
+.button.primary {
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  box-shadow: 0 8px 0 rgba(22, 32, 51, 0.18);
+}
+
+.quick-panel,
+.featured-skill {
+  border-color: rgba(242, 106, 33, 0.26);
+  box-shadow: var(--fun-shadow);
+}
+
+.featured-skill,
+.badge-card.unlocked {
+  background:
+    linear-gradient(135deg, rgba(255, 212, 73, 0.22), transparent 42%),
+    white;
+}
+
+.session-output div,
+.skill-card,
+.game-board article {
+  border-top-width: 5px;
+}
+
+.session-output div {
+  border-top-color: var(--sun);
+}
+
+.skill-card {
+  border-top-color: var(--teal);
+}
+
+.game-board article {
+  border-top-color: var(--orange);
+}
+
+.number {
+  background: linear-gradient(135deg, var(--green), var(--teal));
+}
+
+.meter span {
+  background: linear-gradient(90deg, var(--green), var(--sun), var(--orange));
+}
+
+.link-grid a:hover,
+.link-grid a:focus-visible {
+  box-shadow: var(--shadow);
+}
+
+.fun-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 50;
+  max-width: min(420px, calc(100% - 32px));
+  padding: 14px 18px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--ink), var(--blue));
+  color: white;
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  opacity: 0;
+  transform: translate(-50%, 16px) scale(0.96);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.fun-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
 @media (max-width: 920px) {
