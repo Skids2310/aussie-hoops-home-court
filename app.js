@@ -370,6 +370,10 @@ const games = [
 const skillGrid = document.querySelector("#skill-grid");
 const gameGrid = document.querySelector("#game-grid");
 const sessionOutput = document.querySelector("#session-output");
+const dailySkillName = document.querySelector("#daily-skill-name");
+const dailySkillBody = document.querySelector("#daily-skill-body");
+const dailySkillCue = document.querySelector("#daily-skill-cue");
+const dailySkillTag = document.querySelector("#daily-skill-tag");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const gameFilterButtons = document.querySelectorAll("[data-game-filter]");
 const sessionButtons = document.querySelectorAll("[data-session]");
@@ -409,6 +413,26 @@ function getTopGameScores(gameId) {
 function formatScoreDate(dateKey) {
   const date = new Date(`${dateKey}T12:00:00`);
   return date.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+}
+
+function getDayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now - start;
+  return Math.floor(diff / 86400000);
+}
+
+function renderDailySkill() {
+  if (!dailySkillName || !dailySkillBody || !dailySkillCue || !dailySkillTag) {
+    return;
+  }
+
+  const todayIndex = (getDayOfYear() + new Date().getFullYear()) % skills.length;
+  const skill = skills[todayIndex];
+  dailySkillTag.textContent = `${skill.time} | ${focusLabels[skill.tag] || skill.tag}`;
+  dailySkillName.textContent = skill.title;
+  dailySkillBody.textContent = skill.body;
+  dailySkillCue.textContent = skill.cue;
 }
 
 function renderScoreList(gameId) {
@@ -735,6 +759,7 @@ progressInputs.forEach((input) => {
 
 renderSkills();
 renderGames();
+renderDailySkill();
 setSession();
 updateProgress();
 renderStreaks();
